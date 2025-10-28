@@ -55,4 +55,24 @@ public class UsuariosController {
       return ResponseEntity.notFound().build();
     }
 
+    // ✅ Borrar usuario: DELETE /api/usuarios/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable Long id) {
+        
+        // 1. Verificamos si el usuario existe (igual que en update y showOne)
+        Optional<Usuarios> usuarioOptional = usuariosService.findById(id);
+
+        if (usuarioOptional.isPresent()) {
+            // 2. Si existe, llamamos al servicio para eliminarlo
+            usuariosService.remove(id);
+            
+            // 3. Respondemos con 204 No Content (El estándar para un DELETE exitoso)
+            //    ResponseEntity.ok().build() (200 OK) también es válido.
+            return ResponseEntity.noContent().build();
+        } else {
+            // 4. Si no existe, devolvemos 404 Not Found
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
